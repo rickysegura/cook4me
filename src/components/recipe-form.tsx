@@ -50,7 +50,7 @@ export function RecipeForm({ onSubmit, isLoading }: RecipeFormProps) {
       <CardHeader>
         <CardTitle>Recipe Preferences</CardTitle>
         <CardDescription>
-          Tell us what you're in the mood for, and we'll generate a custom recipe just for you
+          Tell us what you&apos;re in the mood for, and we&apos;ll generate a custom recipe just for you
         </CardDescription>
       </CardHeader>
       <CardContent>
