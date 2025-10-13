@@ -70,7 +70,7 @@ export default function Home() {
           <div className="flex flex-col items-center justify-center py-12">
             <Loader2 className="w-12 h-12 animate-spin text-primary mb-4" />
             <p className="text-lg text-muted-foreground">
-              Generating your perfect recipe...
+              Generating your perfect meal...
             </p>
           </div>
         )}
