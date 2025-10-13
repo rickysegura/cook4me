@@ -1,5 +1,7 @@
 'use client';
 
+import Image from 'next/image';
+
 import { useState } from 'react';
 import { RecipeForm } from '@/components/recipe-form';
 import { RecipeDisplay } from '@/components/recipe-display';
@@ -47,8 +49,16 @@ export default function Home() {
       <div className="container mx-auto max-w-6xl">
         {/* Header */}
         <div className="text-center mb-12">
+          <Image 
+            src="/logo.png" 
+            alt="Munch logo" 
+            width={120} 
+            height={120}
+            className="mx-auto mb-6 rounded-full"
+            priority
+          />
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            AI Recipe Generator
+            Munch
           </h1>
           <p className="text-xl text-muted-foreground">
             Get personalized recipes tailored to your preferences
