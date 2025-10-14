@@ -1,5 +1,5 @@
-# Munch: Digital Cooking Assistant
+# cook4me.
 
-![Screenshot](/public/logo.png)
+![Screenshot](/screenshot.png)
 
-Munch is an AI-powered recipe generator capable of creating meals based on specifications defined by the user.
+cook4me. is an AI-powered recipe generator capable of creating meals based on specifications defined by the user.
