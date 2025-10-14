@@ -58,7 +58,7 @@ export default function Home() {
             priority
           />
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            Munch
+            Cook4Me
           </h1>
           <p className="text-xl text-muted-foreground">
             Get personalized recipes tailored to your preferences

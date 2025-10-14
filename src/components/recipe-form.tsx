@@ -168,6 +168,7 @@ export function RecipeForm({ onSubmit, isLoading }: RecipeFormProps) {
               id="additionalInstructions"
               type="text"
               value={additionalInstructions}
+              onClick={e => e.currentTarget.value === "None" ? setAdditionalInstructions("") : setAdditionalInstructions(e.currentTarget.value)}
               onChange={e => setAdditionalInstructions(e.currentTarget.value)}
             />
           </div>
