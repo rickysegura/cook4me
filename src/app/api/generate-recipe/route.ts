@@ -16,6 +16,7 @@ Skill Level: ${preferences.skillLevel}
 Maximum Cooking Time: ${preferences.maxCookingTime} minutes
 Servings: ${preferences.servings}
 Meal Type: ${preferences.mealType}
+Additional Instructions: ${preferences.additionalInstructions}
 
 Please create an original, detailed recipe that matches ALL of these criteria. 
 

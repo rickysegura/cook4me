@@ -7,6 +7,7 @@ export interface RecipePreferences {
   maxCookingTime: number;
   servings: number;
   mealType: string;
+  additionalInstructions: string;
 }
 
 export interface Recipe {

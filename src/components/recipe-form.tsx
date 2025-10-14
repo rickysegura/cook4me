@@ -21,6 +21,7 @@ export function RecipeForm({ onSubmit, isLoading }: RecipeFormProps) {
   const [maxCookingTime, setMaxCookingTime] = useState([45]);
   const [servings, setServings] = useState(4);
   const [mealType, setMealType] = useState('Dinner');
+  const [additionalInstructions, setAdditionalInstructions] = useState<string>("None");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,6 +33,7 @@ export function RecipeForm({ onSubmit, isLoading }: RecipeFormProps) {
       maxCookingTime: maxCookingTime[0],
       servings,
       mealType,
+      additionalInstructions,
     };
 
     onSubmit(preferences);
@@ -156,6 +158,17 @@ export function RecipeForm({ onSubmit, isLoading }: RecipeFormProps) {
               max={12}
               value={servings}
               onChange={(e) => setServings(parseInt(e.target.value) || 1)}
+            />
+          </div>
+
+          {/* Additional Instructions */}
+          <div className="space-y-2">
+            <Label htmlFor="additionalInstructions">Additional Instructions</Label>
+            <Input
+              id="additionalInstructions"
+              type="text"
+              value={additionalInstructions}
+              onChange={e => setAdditionalInstructions(e.currentTarget.value)}
             />
           </div>
 
