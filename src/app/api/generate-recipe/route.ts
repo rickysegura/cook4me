@@ -1,5 +1,3 @@
-// app/api/generate-recipe/route.ts
-
 import { NextRequest, NextResponse } from 'next/server';
 import { RecipePreferences, Recipe } from '@/lib/types';
 
@@ -8,46 +6,45 @@ export async function POST(request: NextRequest) {
     const preferences: RecipePreferences = await request.json();
 
     // Construct the prompt for Claude
-    const prompt = `Generate a complete recipe based on these preferences:
+    const prompt = `Generate a complete recipe based on these preferences: 
+    Cuisine Type: ${preferences.cuisineType}
+    Dietary Restrictions: ${preferences.dietaryRestrictions.join(', ') || 'None'}
+    Skill Level: ${preferences.skillLevel}
+    Maximum Cooking Time: ${preferences.maxCookingTime} minutes
+    Servings: ${preferences.servings}
+    Meal Type: ${preferences.mealType}
+    Additional Instructions: ${preferences.additionalInstructions}
 
-Cuisine Type: ${preferences.cuisineType}
-Dietary Restrictions: ${preferences.dietaryRestrictions.join(', ') || 'None'}
-Skill Level: ${preferences.skillLevel}
-Maximum Cooking Time: ${preferences.maxCookingTime} minutes
-Servings: ${preferences.servings}
-Meal Type: ${preferences.mealType}
-Additional Instructions: ${preferences.additionalInstructions}
+    Please create an original, detailed recipe that matches ALL of these criteria. 
 
-Please create an original, detailed recipe that matches ALL of these criteria. 
+    IMPORTANT: You must respond with ONLY a valid JSON object in this exact format. Do not include any text, explanations, or markdown formatting outside the JSON structure:
 
-IMPORTANT: You must respond with ONLY a valid JSON object in this exact format. Do not include any text, explanations, or markdown formatting outside the JSON structure:
-
-{
-  "name": "Recipe Name",
-  "description": "Brief description of the dish (2-3 sentences)",
-  "prepTime": number (in minutes),
-  "cookTime": number (in minutes),
-  "totalTime": number (in minutes),
-  "servings": number,
-  "difficulty": "Easy" | "Medium" | "Hard",
-  "ingredients": [
     {
-      "item": "ingredient name",
-      "amount": "quantity and unit",
-      "notes": "optional preparation notes"
+      "name": "Recipe Name",
+      "description": "Brief description of the dish (2-3 sentences)",
+      "prepTime": number (in minutes),
+      "cookTime": number (in minutes),
+      "totalTime": number (in minutes),
+      "servings": number,
+      "difficulty": "Easy" | "Medium" | "Hard",
+      "ingredients": [
+        {
+          "item": "ingredient name",
+          "amount": "quantity and unit",
+          "notes": "optional preparation notes"
+        }
+      ],
+      "instructions": [
+        "Step 1 description",
+        "Step 2 description"
+      ],
+      "tips": [
+        "Optional cooking tip 1",
+        "Optional cooking tip 2"
+      ]
     }
-  ],
-  "instructions": [
-    "Step 1 description",
-    "Step 2 description"
-  ],
-  "tips": [
-    "Optional cooking tip 1",
-    "Optional cooking tip 2"
-  ]
-}
 
-DO NOT include markdown code blocks or any text outside the JSON object. Your entire response must be valid JSON only.`;
+    DO NOT include markdown code blocks or any text outside the JSON object. Your entire response must be valid JSON only.`;
 
     // Call the Anthropic API
     const response = await fetch('https://api.anthropic.com/v1/messages', {
