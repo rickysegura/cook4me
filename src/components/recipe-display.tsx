@@ -1,8 +1,17 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import { Recipe } from '@/lib/types';
 import { Clock, Users, ChefHat, Bookmark, BookmarkCheck } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
@@ -15,9 +24,11 @@ interface RecipeDisplayProps {
 
 export function RecipeDisplay({ recipe, onGenerateAnother }: RecipeDisplayProps) {
   const { user } = useAuth();
+  const router = useRouter();
   const [isSaved, setIsSaved] = useState(false);
   const [savedRecipeId, setSavedRecipeId] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const [showSignUpModal, setShowSignUpModal] = useState(false);
 
   useEffect(() => {
     const checkIfSaved = async () => {
@@ -38,7 +49,7 @@ export function RecipeDisplay({ recipe, onGenerateAnother }: RecipeDisplayProps)
 
   const handleBookmark = async () => {
     if (!user) {
-      alert('Please sign in to save recipes');
+      setShowSignUpModal(true);
       return;
     }
 
@@ -73,27 +84,25 @@ export function RecipeDisplay({ recipe, onGenerateAnother }: RecipeDisplayProps)
                 {recipe.description}
               </CardDescription>
             </div>
-            {user && (
-              <Button
-                variant={isSaved ? 'default' : 'outline'}
-                size="sm"
-                onClick={handleBookmark}
-                disabled={isSaving}
-                className="cursor-pointer flex-shrink-0"
-              >
-                {isSaved ? (
-                  <>
-                    <BookmarkCheck className="w-4 h-4 mr-2" />
-                    Saved
-                  </>
-                ) : (
-                  <>
-                    <Bookmark className="w-4 h-4 mr-2" />
-                    Save Recipe
-                  </>
-                )}
-              </Button>
-            )}
+            <Button
+              variant={isSaved ? 'default' : 'outline'}
+              size="sm"
+              onClick={handleBookmark}
+              disabled={isSaving}
+              className="cursor-pointer flex-shrink-0"
+            >
+              {isSaved ? (
+                <>
+                  <BookmarkCheck className="w-4 h-4 mr-2" />
+                  Saved
+                </>
+              ) : (
+                <>
+                  <Bookmark className="w-4 h-4 mr-2" />
+                  Save Recipe
+                </>
+              )}
+            </Button>
           </div>
         </CardHeader>
         <CardContent>
@@ -196,6 +205,74 @@ export function RecipeDisplay({ recipe, onGenerateAnother }: RecipeDisplayProps)
           Generate Another Recipe
         </Button>
       </div>
+
+      {/* Sign Up Modal */}
+      <Dialog open={showSignUpModal} onOpenChange={setShowSignUpModal}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Save Your Favorite Recipes</DialogTitle>
+            <DialogDescription>
+              Create an account to save and access your favorite recipes anytime, anywhere.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+                <Bookmark className="h-5 w-5 text-primary" />
+              </div>
+              <div className="flex-1">
+                <h4 className="font-semibold">Bookmark Recipes</h4>
+                <p className="text-sm text-muted-foreground">
+                  Save your favorite recipes for quick access
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+                <Users className="h-5 w-5 text-primary" />
+              </div>
+              <div className="flex-1">
+                <h4 className="font-semibold">Personalized Collection</h4>
+                <p className="text-sm text-muted-foreground">
+                  Build your own recipe library
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+                <ChefHat className="h-5 w-5 text-primary" />
+              </div>
+              <div className="flex-1">
+                <h4 className="font-semibold">Access Anywhere</h4>
+                <p className="text-sm text-muted-foreground">
+                  View your recipes on any device
+                </p>
+              </div>
+            </div>
+          </div>
+          <DialogFooter className="flex-col sm:flex-row gap-2">
+            <Button
+              variant="outline"
+              onClick={() => {
+                setShowSignUpModal(false);
+                router.push('/login');
+              }}
+              className="cursor-pointer w-full sm:w-auto"
+            >
+              Sign In
+            </Button>
+            <Button
+              onClick={() => {
+                setShowSignUpModal(false);
+                router.push('/signup');
+              }}
+              className="cursor-pointer w-full sm:w-auto"
+            >
+              Create Account
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
