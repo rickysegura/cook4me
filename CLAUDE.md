@@ -96,15 +96,21 @@ src/
 ## Environment Variables
 
 Required in `.env.local`:
+
+```bash
+# Anthropic API
+ANTHROPIC_API_KEY=                          # API key for Claude Sonnet 4 (from console.anthropic.com)
+
+# Firebase Configuration
+NEXT_PUBLIC_FIREBASE_API_KEY=               # Firebase project API key
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=           # Firebase Auth domain (project-id.firebaseapp.com)
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=            # Firebase project ID
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=        # Firebase Storage bucket URL
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=   # Firebase Cloud Messaging sender ID
+NEXT_PUBLIC_FIREBASE_APP_ID=                # Firebase application ID
 ```
-ANTHROPIC_API_KEY=           # Anthropic API key for Claude
-NEXT_PUBLIC_FIREBASE_API_KEY=
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
-NEXT_PUBLIC_FIREBASE_PROJECT_ID=
-NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=
-NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
-NEXT_PUBLIC_FIREBASE_APP_ID=
-```
+
+**Note**: All Firebase variables are prefixed with `NEXT_PUBLIC_` because they're used in client-side code. These values are safe to expose as Firebase security is handled through Firestore rules and Auth configuration.
 
 ## Important Implementation Details
 
