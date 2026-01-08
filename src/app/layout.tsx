@@ -27,6 +27,10 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         {children}
+        
+        <footer className="bg-black py-12 px-4 text-center text-white text-sm">
+          <p>Created by <a href="https://rickysegura.dev/" className="text-sky-500 hover:text-sky-300">Ricky Segura</a><br/>Los Angeles, CA</p>
+        </footer>
       </body>
     </html>
   );
