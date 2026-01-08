@@ -1,9 +1,12 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Recipe } from '@/lib/types';
-import { Clock, Users, ChefHat } from 'lucide-react';
+import { Clock, Users, ChefHat, Bookmark, BookmarkCheck } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import { saveRecipe, deleteRecipe, isRecipeSaved } from '@/lib/recipes-db';
 
 interface RecipeDisplayProps {
   recipe: Recipe;
@@ -11,15 +14,87 @@ interface RecipeDisplayProps {
 }
 
 export function RecipeDisplay({ recipe, onGenerateAnother }: RecipeDisplayProps) {
+  const { user } = useAuth();
+  const [isSaved, setIsSaved] = useState(false);
+  const [savedRecipeId, setSavedRecipeId] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
+
+  useEffect(() => {
+    const checkIfSaved = async () => {
+      if (user && recipe.name) {
+        const recipeId = await isRecipeSaved(user.uid, recipe.name);
+        if (recipeId) {
+          setIsSaved(true);
+          setSavedRecipeId(recipeId);
+        } else {
+          setIsSaved(false);
+          setSavedRecipeId(null);
+        }
+      }
+    };
+
+    checkIfSaved();
+  }, [user, recipe.name]);
+
+  const handleBookmark = async () => {
+    if (!user) {
+      alert('Please sign in to save recipes');
+      return;
+    }
+
+    setIsSaving(true);
+
+    try {
+      if (isSaved && savedRecipeId) {
+        await deleteRecipe(savedRecipeId);
+        setIsSaved(false);
+        setSavedRecipeId(null);
+      } else {
+        const recipeId = await saveRecipe(user.uid, recipe);
+        setIsSaved(true);
+        setSavedRecipeId(recipeId);
+      }
+    } catch (error) {
+      console.error('Error bookmarking recipe:', error);
+      alert('Failed to save recipe. Please try again.');
+    } finally {
+      setIsSaving(false);
+    }
+  };
   return (
     <div className="w-full max-w-4xl mx-auto space-y-6">
       {/* Recipe Header */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-3xl">{recipe.name}</CardTitle>
-          <CardDescription className="text-base mt-2">
-            {recipe.description}
-          </CardDescription>
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex-1">
+              <CardTitle className="text-3xl">{recipe.name}</CardTitle>
+              <CardDescription className="text-base mt-2">
+                {recipe.description}
+              </CardDescription>
+            </div>
+            {user && (
+              <Button
+                variant={isSaved ? 'default' : 'outline'}
+                size="sm"
+                onClick={handleBookmark}
+                disabled={isSaving}
+                className="cursor-pointer flex-shrink-0"
+              >
+                {isSaved ? (
+                  <>
+                    <BookmarkCheck className="w-4 h-4 mr-2" />
+                    Saved
+                  </>
+                ) : (
+                  <>
+                    <Bookmark className="w-4 h-4 mr-2" />
+                    Save Recipe
+                  </>
+                )}
+              </Button>
+            )}
+          </div>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
