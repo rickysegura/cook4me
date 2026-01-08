@@ -117,7 +117,7 @@ export function RecipeDisplay({ recipe, onGenerateAnother }: RecipeDisplayProps)
 
       {/* Generate Another Button */}
       <div className="flex justify-center pt-4">
-        <Button onClick={onGenerateAnother} size="lg">
+        <Button onClick={onGenerateAnother} size="lg" className="cursor-pointer">
           Generate Another Recipe
         </Button>
       </div>

@@ -1,17 +1,31 @@
 'use client';
 
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 import { useState } from 'react';
 import { RecipeForm } from '@/components/recipe-form';
 import { RecipeDisplay } from '@/components/recipe-display';
 import { Recipe, RecipePreferences } from '@/lib/types';
-import { Loader2 } from 'lucide-react';
+import { Loader2, LogOut, User } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import { Button } from '@/components/ui/button';
 
 export default function Home() {
+  const { user, signOut: authSignOut } = useAuth();
+  const router = useRouter();
   const [recipe, setRecipe] = useState<Recipe | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const handleSignOut = async () => {
+    try {
+      await authSignOut();
+      router.push('/login');
+    } catch (error) {
+      console.error('Sign out error:', error);
+    }
+  };
 
   const handleGenerateRecipe = async (preferences: RecipePreferences) => {
     setIsLoading(true);
@@ -47,12 +61,37 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-gradient-to-b from-background to-muted py-12 px-4">
       <div className="container mx-auto max-w-6xl">
+        {/* Navigation */}
+        <div className="flex justify-end mb-8">
+          {user ? (
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <User className="w-4 h-4" />
+                <span>{user.displayName || user.email}</span>
+              </div>
+              <Button variant="outline" size="sm" onClick={handleSignOut}>
+                <LogOut className="w-4 h-4 mr-2" />
+                Sign out
+              </Button>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2">
+              <Button variant="outline" size="sm" className="cursor-pointer" onClick={() => router.push('/login')}>
+                Sign in
+              </Button>
+              <Button size="sm" className="cursor-pointer" onClick={() => router.push('/signup')}>
+                Sign up
+              </Button>
+            </div>
+          )}
+        </div>
+
         {/* Header */}
         <div className="text-center mb-12">
-          <Image 
-            src="/logo.png" 
-            alt="Munch logo" 
-            width={120} 
+          <Image
+            src="/logo.png"
+            alt="Munch logo"
+            width={120}
             height={120}
             className="mx-auto mb-6 rounded-xl"
             priority
