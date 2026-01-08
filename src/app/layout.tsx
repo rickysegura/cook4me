@@ -1,8 +1,10 @@
 import "./globals.css";
 
-import type { Metadata } from "next";
+import { FaXTwitter } from "react-icons/fa6";
 import { Geist, Geist_Mono } from "next/font/google";
 import { AuthProvider } from "@/contexts/AuthContext";
+
+import type { Metadata } from "next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,8 +33,13 @@ export default function RootLayout({
           {children}
         </AuthProvider>
 
-        <footer className="bg-black py-12 px-4 text-center text-white text-sm">
-          <p>Created by <a href="https://rickysegura.dev/" className="text-sky-500 hover:text-sky-300">Ricky Segura</a><br/>Los Angeles, CA</p>
+        <footer className="bg-black py-8 text-center text-white text-sm">
+          <p>Made with love ❤️</p>
+          <p>&copy; 2024 cook4me. All rights reserved.</p>
+          <a href="https://x.com/cookformeapp" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 mt-4">
+            <span>Follow us on</span>
+            <FaXTwitter size={18} />
+          </a>
         </footer>
       </body>
     </html>
