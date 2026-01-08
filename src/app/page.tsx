@@ -69,7 +69,7 @@ export default function Home() {
                 <User className="w-4 h-4" />
                 <span>{user.displayName || user.email}</span>
               </div>
-              <Button variant="outline" size="sm" onClick={handleSignOut}>
+              <Button variant="outline" size="sm" className="cursor-pointer" onClick={handleSignOut}>
                 <LogOut className="w-4 h-4 mr-2" />
                 Sign out
               </Button>
