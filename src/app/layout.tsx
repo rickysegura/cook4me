@@ -45,7 +45,7 @@ export default function RootLayout({
               <div>
                 <h3 className="text-base font-semibold mb-2">cook4me</h3>
                 <p className="text-gray-400">
-                  Made with love ❤️
+                  Made with ❤️
                 </p>
               </div>
 
