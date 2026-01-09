@@ -54,19 +54,24 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-md">
-        <div className="text-center mb-8">
+        {/* Header */}
+        <div className="text-center max-w-6xl mb-8">
           <Link href="/">
             <Image
               src="/logo.png"
-              alt="Cook4Me logo"
-              width={80}
-              height={80}
-              className="mx-auto mb-4 rounded-xl"
+              alt="Munch logo"
+              width={120}
+              height={120}
+              className="mx-auto mb-6 rounded-2xl"
               priority
             />
           </Link>
-          <h1 className="text-3xl font-bold">cook4me.</h1>
-          <p className="text-muted-foreground mt-2">Sign in to your account</p>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">
+            cook4me.
+          </h1>
+          <p className="text-xl text-muted-foreground">
+            Sign in to your accunt
+          </p>
         </div>
 
         <Card>

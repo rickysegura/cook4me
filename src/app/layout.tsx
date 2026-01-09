@@ -20,7 +20,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Cook4Me: AI Recipe Generator",
+  title: "cook4me: AI Recipe Generator",
   description: "Munch is an AI recipe generator created by Ricky Segura",
 };
 
