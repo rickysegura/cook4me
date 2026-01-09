@@ -9,16 +9,26 @@ import {
   User,
 } from 'firebase/auth';
 import { auth } from './firebase';
+import { createUserProfile, userProfileExists } from './users-db';
 
 export const signUp = async (email: string, password: string, displayName?: string) => {
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
 
-    if (displayName && userCredential.user) {
-      await updateProfile(userCredential.user, { displayName });
+    if (displayName && user) {
+      await updateProfile(user, { displayName });
     }
 
-    return userCredential.user;
+    // Create user profile document in Firestore
+    await createUserProfile({
+      userId: user.uid,
+      email: user.email || email,
+      username: displayName || email.split('@')[0],
+      profilePictureUrl: user.photoURL || '',
+    });
+
+    return user;
   } catch (error) {
     throw error;
   }
@@ -53,7 +63,20 @@ export const signInWithGoogle = async () => {
   try {
     const provider = new GoogleAuthProvider();
     const userCredential = await signInWithPopup(auth, provider);
-    return userCredential.user;
+    const user = userCredential.user;
+
+    // Check if user profile exists, if not create one (for new Google users)
+    const profileExists = await userProfileExists(user.uid);
+    if (!profileExists) {
+      await createUserProfile({
+        userId: user.uid,
+        email: user.email || '',
+        username: user.displayName || user.email?.split('@')[0] || 'User',
+        profilePictureUrl: user.photoURL || '',
+      });
+    }
+
+    return user;
   } catch (error) {
     throw error;
   }

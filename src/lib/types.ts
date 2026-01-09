@@ -28,3 +28,12 @@ export interface Ingredient {
   amount: string;
   notes?: string;
 }
+
+export interface UserProfile {
+  userId: string;
+  email: string;
+  username: string;
+  profilePictureUrl?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
