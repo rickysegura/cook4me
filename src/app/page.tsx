@@ -59,10 +59,10 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-background to-muted py-12 px-4">
+    <main className="min-h-screen sm:py-8 pt-8">
       <div className="container mx-auto max-w-6xl">
         {/* Navigation */}
-        <div className="flex justify-end mb-8">
+        <div className="flex justify-end mb-8 mx-4">
           {user ? (
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -91,13 +91,13 @@ export default function Home() {
         </div>
 
         {/* Header */}
-        <div className="text-center mb-12">
+        <div className="text-center max-w-6xl sm:mb-8">
           <Image
             src="/logo.png"
             alt="Munch logo"
             width={120}
             height={120}
-            className="mx-auto mb-6 rounded-xl"
+            className="mx-auto mb-6 rounded-2xl"
             priority
           />
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
@@ -129,7 +129,9 @@ export default function Home() {
         {!isLoading && (
           <>
             {recipe ? (
-              <RecipeDisplay recipe={recipe} onGenerateAnother={handleGenerateAnother} />
+              <div className="p-8 sm:p-0">
+                <RecipeDisplay recipe={recipe} onGenerateAnother={handleGenerateAnother} />
+              </div>
             ) : (
               <RecipeForm onSubmit={handleGenerateRecipe} isLoading={isLoading} />
             )}

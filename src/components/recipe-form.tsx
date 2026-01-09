@@ -48,14 +48,14 @@ export function RecipeForm({ onSubmit, isLoading }: RecipeFormProps) {
   };
 
   return (
-    <Card className="w-full max-w-2xl mx-auto">
-      <CardHeader>
+    <Card className="w-full sm:max-w-6xl sm:p-0 py-8 px-8 border-none shadow-none rounded-none mx-auto">
+      <CardHeader className="p-0">
         <CardTitle>Recipe Preferences</CardTitle>
         <CardDescription>
-          Tell us what you&apos;re in the mood for, and we&apos;ll generate a custom recipe just for you
+          Tell us what you&apos;re in the mood for, and we&apos;ll generate a custom recipe just for you.
         </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="px-0">
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Cuisine Type */}
           <div className="space-y-2">
