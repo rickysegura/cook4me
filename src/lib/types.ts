@@ -7,6 +7,15 @@ export interface MacroTargets {
   fats?: number;
 }
 
+export interface TasteProfile {
+  favoriteCuisines: string[];
+  commonDietaryRestrictions: string[];
+  preferredDifficulty: string[];
+  averageCookingTime: number;
+  favoriteIngredients: string[];
+  macroPreferences?: MacroTargets;
+}
+
 export interface RecipePreferences {
   cuisineType: string;
   dietaryRestrictions: string[];
@@ -16,6 +25,7 @@ export interface RecipePreferences {
   mealType: string;
   additionalInstructions: string;
   macroTargets?: MacroTargets;
+  tasteProfile?: TasteProfile;
 }
 
 export interface NutritionInfo {

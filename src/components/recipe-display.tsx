@@ -13,9 +13,9 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Recipe } from '@/lib/types';
-import { Clock, Users, ChefHat, Bookmark, BookmarkCheck, Flame } from 'lucide-react';
+import { Clock, Users, ChefHat, Bookmark, BookmarkCheck, Flame, Heart } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
-import { saveRecipe, deleteRecipe, isRecipeSaved } from '@/lib/recipes-db';
+import { saveRecipe, deleteRecipe, isRecipeSaved, toggleRecipeLoved, getRecipe } from '@/lib/recipes-db';
 
 interface RecipeDisplayProps {
   recipe: Recipe;
@@ -29,6 +29,8 @@ export function RecipeDisplay({ recipe, onGenerateAnother }: RecipeDisplayProps)
   const [savedRecipeId, setSavedRecipeId] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [showSignUpModal, setShowSignUpModal] = useState(false);
+  const [isLoved, setIsLoved] = useState(false);
+  const [isTogglingLove, setIsTogglingLove] = useState(false);
 
   useEffect(() => {
     const checkIfSaved = async () => {
@@ -37,9 +39,16 @@ export function RecipeDisplay({ recipe, onGenerateAnother }: RecipeDisplayProps)
         if (recipeId) {
           setIsSaved(true);
           setSavedRecipeId(recipeId);
+
+          // Check if it's loved
+          const savedRecipe = await getRecipe(recipeId);
+          if (savedRecipe?.isLoved) {
+            setIsLoved(true);
+          }
         } else {
           setIsSaved(false);
           setSavedRecipeId(null);
+          setIsLoved(false);
         }
       }
     };
@@ -72,6 +81,31 @@ export function RecipeDisplay({ recipe, onGenerateAnother }: RecipeDisplayProps)
       setIsSaving(false);
     }
   };
+
+  const handleToggleLove = async () => {
+    if (!user) {
+      setShowSignUpModal(true);
+      return;
+    }
+
+    if (!savedRecipeId) {
+      alert('Please save the recipe first before marking it as loved.');
+      return;
+    }
+
+    setIsTogglingLove(true);
+    try {
+      const newLovedState = !isLoved;
+      await toggleRecipeLoved(savedRecipeId, newLovedState);
+      setIsLoved(newLovedState);
+    } catch (error) {
+      console.error('Error toggling loved status:', error);
+      alert('Failed to update loved status. Please try again.');
+    } finally {
+      setIsTogglingLove(false);
+    }
+  };
+
   return (
     <div className="w-full max-w-4xl mx-auto space-y-6">
       {/* Recipe Header */}
@@ -84,25 +118,41 @@ export function RecipeDisplay({ recipe, onGenerateAnother }: RecipeDisplayProps)
                 {recipe.description}
               </CardDescription>
             </div>
-            <Button
-              variant={isSaved ? 'default' : 'outline'}
-              size="sm"
-              onClick={handleBookmark}
-              disabled={isSaving}
-              className="cursor-pointer flex-shrink-0"
-            >
-              {isSaved ? (
-                <>
-                  <BookmarkCheck className="w-4 h-4 mr-2" />
-                  Saved
-                </>
-              ) : (
-                <>
-                  <Bookmark className="w-4 h-4 mr-2" />
-                  Save Recipe
-                </>
+            <div className="flex gap-2 flex-shrink-0">
+              {isSaved && (
+                <Button
+                  variant={isLoved ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={handleToggleLove}
+                  disabled={isTogglingLove}
+                  className="cursor-pointer"
+                >
+                  <Heart
+                    className={`w-4 h-4 mr-2 ${isLoved ? 'fill-current' : ''}`}
+                  />
+                  {isLoved ? 'Loved' : 'Love'}
+                </Button>
               )}
-            </Button>
+              <Button
+                variant={isSaved ? 'default' : 'outline'}
+                size="sm"
+                onClick={handleBookmark}
+                disabled={isSaving}
+                className="cursor-pointer"
+              >
+                {isSaved ? (
+                  <>
+                    <BookmarkCheck className="w-4 h-4 mr-2" />
+                    Saved
+                  </>
+                ) : (
+                  <>
+                    <Bookmark className="w-4 h-4 mr-2" />
+                    Save
+                  </>
+                )}
+              </Button>
+            </div>
           </div>
         </CardHeader>
         <CardContent>

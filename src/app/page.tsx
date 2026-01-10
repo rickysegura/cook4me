@@ -49,12 +49,22 @@ export default function Home() {
     setError(null);
 
     try {
+      // Analyze taste profile if user is logged in
+      let tasteProfile = null;
+      if (user) {
+        const { analyzeTasteProfile } = await import('@/lib/taste-profile');
+        tasteProfile = await analyzeTasteProfile(user.uid);
+      }
+
       const response = await fetch('/api/generate-recipe', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(preferences),
+        body: JSON.stringify({
+          ...preferences,
+          ...(tasteProfile && { tasteProfile }),
+        }),
       });
 
       if (!response.ok) {

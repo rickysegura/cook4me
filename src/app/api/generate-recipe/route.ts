@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { RecipePreferences, Recipe } from '@/lib/types';
+import { formatTasteProfileForPrompt } from '@/lib/taste-profile';
 
 export async function POST(request: NextRequest) {
   try {
@@ -17,6 +18,15 @@ export async function POST(request: NextRequest) {
     IMPORTANT: Try to meet these macro targets as closely as possible. Adjust ingredient quantities and selections to achieve the target nutrition profile.`
       : '';
 
+    // Construct taste profile string
+    const tasteProfileString = preferences.tasteProfile
+      ? `
+    User's Taste Profile (based on saved and loved recipes):
+    ${formatTasteProfileForPrompt(preferences.tasteProfile)}
+
+    IMPORTANT: Consider the user's taste profile when creating this recipe. Try to incorporate their favorite cuisines, ingredients, and preferences while still meeting the specified requirements.`
+      : '';
+
     // Construct the prompt for Claude
     const prompt = `Generate a complete recipe based on these preferences:
     Cuisine Type: ${preferences.cuisineType}
@@ -25,7 +35,7 @@ export async function POST(request: NextRequest) {
     Maximum Cooking Time: ${preferences.maxCookingTime} minutes
     Servings: ${preferences.servings}
     Meal Type: ${preferences.mealType}
-    Additional Instructions: ${preferences.additionalInstructions}${macroTargetsString}
+    Additional Instructions: ${preferences.additionalInstructions}${macroTargetsString}${tasteProfileString}
 
     Please create an original, detailed recipe that matches ALL of these criteria. 
 

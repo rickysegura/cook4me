@@ -6,6 +6,7 @@ import { FaXTwitter } from "react-icons/fa6";
 import { MdEmail } from "react-icons/md"
 import { Geist, Geist_Mono } from "next/font/google";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { Analytics } from "@vercel/analytics/next"
 
 import type { Metadata } from "next";
 
@@ -102,6 +103,7 @@ export default function RootLayout({
             </div>
           </div>
         </div>
+        <Analytics />
       </body>
     </html>
   );
