@@ -3,13 +3,14 @@
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { RecipeForm } from '@/components/recipe-form';
 import { RecipeDisplay } from '@/components/recipe-display';
-import { Recipe, RecipePreferences } from '@/lib/types';
-import { Loader2, LogOut, User, Bookmark, Settings } from 'lucide-react';
+import { Recipe, RecipePreferences, UserProfile } from '@/lib/types';
+import { Loader2, LogOut, User, Bookmark } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
+import { getUserProfile } from '@/lib/users-db';
 
 export default function Home() {
   const { user, signOut: authSignOut } = useAuth();
@@ -17,6 +18,22 @@ export default function Home() {
   const [recipe, setRecipe] = useState<Recipe | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+
+  useEffect(() => {
+    const loadUserProfile = async () => {
+      if (user) {
+        try {
+          const profile = await getUserProfile(user.uid);
+          setUserProfile(profile);
+        } catch (error) {
+          console.error('Error loading user profile:', error);
+        }
+      }
+    };
+
+    loadUserProfile();
+  }, [user]);
 
   const handleSignOut = async () => {
     try {
@@ -64,24 +81,78 @@ export default function Home() {
         {/* Navigation */}
         <div className="flex justify-end mb-8 mx-4">
           {user ? (
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <User className="w-4 h-4" />
-                <span>{user.displayName || user.email}</span>
+            <>
+              {/* Desktop Navigation */}
+              <div className="hidden md:flex items-center gap-3">
+                <div className="flex items-center gap-2 cursor-pointer" onClick={() => router.push('/settings')}>
+                  {userProfile?.profilePictureUrl ? (
+                    <Image
+                      src={userProfile.profilePictureUrl}
+                      alt="Profile"
+                      width={32}
+                      height={32}
+                      className="w-8 h-8 rounded-full object-cover border border-border"
+                    />
+                  ) : (
+                    <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center border border-border">
+                      <User className="w-4 h-4 text-muted-foreground" />
+                    </div>
+                  )}
+                  <span className="text-sm font-medium max-w-[120px] truncate">
+                    {userProfile?.username || user.displayName || user.email}
+                  </span>
+                </div>
+                <Button variant="outline" size="sm" className="cursor-pointer" onClick={() => router.push('/saved-recipes')}>
+                  <Bookmark className="w-4 h-4 mr-2" />
+                  Saved Recipes
+                </Button>
+                <Button variant="outline" size="sm" className="cursor-pointer" onClick={handleSignOut}>
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Sign out
+                </Button>
               </div>
-              <Button variant="outline" size="sm" className="cursor-pointer" onClick={() => router.push('/saved-recipes')}>
-                <Bookmark className="w-4 h-4 mr-2" />
-                Saved Recipes
-              </Button>
-              <Button variant="outline" size="sm" className="cursor-pointer" onClick={() => router.push('/settings')}>
-                <Settings className="w-4 h-4 mr-2" />
-                Settings
-              </Button>
-              <Button variant="outline" size="sm" className="cursor-pointer" onClick={handleSignOut}>
-                <LogOut className="w-4 h-4 mr-2" />
-                Sign out
-              </Button>
-            </div>
+
+              {/* Mobile Navigation */}
+              <div className="flex md:hidden items-center gap-2">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="cursor-pointer p-2"
+                  onClick={() => router.push('/settings')}
+                  aria-label="Profile"
+                >
+                  {userProfile?.profilePictureUrl ? (
+                    <Image
+                      src={userProfile.profilePictureUrl}
+                      alt="Profile"
+                      width={24}
+                      height={24}
+                      className="w-6 h-6 rounded-full object-cover"
+                    />
+                  ) : (
+                    <User className="w-5 h-5" />
+                  )}
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="cursor-pointer p-2"
+                  onClick={() => router.push('/saved-recipes')}
+                  aria-label="Saved Recipes"
+                >
+                  <Bookmark className="w-5 h-5" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="cursor-pointer p-2"
+                  onClick={handleSignOut}
+                  aria-label="Sign out"
+                >
+                  <LogOut className="w-5 h-5" />
+                </Button>
+              </div>
+            </>
           ) : (
             <div className="flex items-center gap-2">
               <Button variant="outline" size="sm" className="cursor-pointer" onClick={() => router.push('/login')}>
