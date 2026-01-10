@@ -10,7 +10,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Loader2, Settings, ArrowLeft, Upload, User } from 'lucide-react';
+import { Loader2, Settings, ArrowLeft, Upload, User, Download, Smartphone } from 'lucide-react';
+
+interface BeforeInstallPromptEvent extends Event {
+  prompt: () => Promise<void>;
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
+}
 
 export default function SettingsPage() {
   const { user, loading: authLoading } = useAuth();
@@ -24,6 +29,8 @@ export default function SettingsPage() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [initialUsername, setInitialUsername] = useState('');
   const [initialProfilePictureUrl, setInitialProfilePictureUrl] = useState('');
+  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+  const [isInstalled, setIsInstalled] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const hasChanges = username.trim() !== initialUsername || profilePictureUrl !== initialProfilePictureUrl;
@@ -59,6 +66,55 @@ export default function SettingsPage() {
 
     loadProfile();
   }, [user]);
+
+  useEffect(() => {
+    // Check if app is already installed
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      setIsInstalled(true);
+    }
+
+    // Listen for the beforeinstallprompt event
+    const handleBeforeInstallPrompt = (e: Event) => {
+      e.preventDefault();
+      setDeferredPrompt(e as BeforeInstallPromptEvent);
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+
+    // Listen for app installed event
+    const handleAppInstalled = () => {
+      setIsInstalled(true);
+      setDeferredPrompt(null);
+    };
+
+    window.addEventListener('appinstalled', handleAppInstalled);
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      window.removeEventListener('appinstalled', handleAppInstalled);
+    };
+  }, []);
+
+  const handleInstallClick = async () => {
+    if (!deferredPrompt) {
+      return;
+    }
+
+    // Show the install prompt
+    await deferredPrompt.prompt();
+
+    // Wait for the user's response
+    const { outcome } = await deferredPrompt.userChoice;
+
+    if (outcome === 'accepted') {
+      console.log('User accepted the install prompt');
+    } else {
+      console.log('User dismissed the install prompt');
+    }
+
+    // Clear the deferred prompt
+    setDeferredPrompt(null);
+  };
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -289,6 +345,66 @@ export default function SettingsPage() {
                   maxLength={50}
                 />
               </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Install App</CardTitle>
+              <CardDescription>
+                Install cook4me as a native app on your device
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {isInstalled ? (
+                <div className="flex items-center gap-3 p-4 rounded-lg bg-muted/50">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+                    <Smartphone className="h-5 w-5 text-primary" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-medium">App is installed</p>
+                    <p className="text-sm text-muted-foreground">
+                      cook4me is already installed on this device
+                    </p>
+                  </div>
+                </div>
+              ) : deferredPrompt ? (
+                <div className="space-y-4">
+                  <div className="flex items-start gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 flex-shrink-0">
+                      <Download className="h-5 w-5 text-primary" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-medium mb-2">Install for the best experience</p>
+                      <ul className="text-sm text-muted-foreground space-y-1 list-disc list-inside">
+                        <li>Access from your home screen</li>
+                        <li>Works offline with cached recipes</li>
+                        <li>Faster loading and native app feel</li>
+                        <li>No browser navigation bars</li>
+                      </ul>
+                    </div>
+                  </div>
+                  <Button
+                    onClick={handleInstallClick}
+                    className="w-full cursor-pointer"
+                  >
+                    <Download className="w-4 h-4 mr-2" />
+                    Install App
+                  </Button>
+                </div>
+              ) : (
+                <div className="flex items-start gap-3 p-4 rounded-lg bg-muted/50">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted flex-shrink-0">
+                    <Smartphone className="h-5 w-5 text-muted-foreground" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-medium">Installation not available</p>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      To install cook4me, visit this site in Chrome, Edge, or Safari and look for the install option in your browser&apos;s menu.
+                    </p>
+                  </div>
+                </div>
+              )}
             </CardContent>
           </Card>
 

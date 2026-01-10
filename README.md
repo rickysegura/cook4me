@@ -45,6 +45,14 @@ An intelligent AI-powered recipe generator that creates personalized recipes tai
 - **Icon-Based Mobile Nav**: Clean, efficient interface on small screens
 - **Fast Performance**: Built with Next.js 15 and Turbopack
 
+### 📲 Progressive Web App (PWA)
+- **Installable**: Add cook4me to your home screen on any device
+- **Offline Support**: Service workers cache assets for offline functionality
+- **App-Like Experience**: Runs in standalone mode without browser chrome
+- **Fast Loading**: Optimized caching strategies for instant load times
+- **App Shortcuts**: Quick access to Generate Recipe and Saved Recipes from your home screen
+- **Cross-Platform**: Works on iOS, Android, and desktop devices
+
 ## Tech Stack
 
 - **Framework**: Next.js 15 (App Router with Turbopack)
@@ -55,6 +63,7 @@ An intelligent AI-powered recipe generator that creates personalized recipes tai
 - **Authentication**: Firebase Auth
 - **Database**: Cloud Firestore
 - **Storage**: Firebase Storage
+- **PWA**: @ducanh2912/next-pwa (Service workers & offline support)
 - **Deployment**: Vercel-ready
 
 ## Getting Started
