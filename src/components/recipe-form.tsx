@@ -22,10 +22,21 @@ export function RecipeForm({ onSubmit, isLoading }: RecipeFormProps) {
   const [servings, setServings] = useState(4);
   const [mealType, setMealType] = useState('Dinner');
   const [additionalInstructions, setAdditionalInstructions] = useState<string>("None");
+  const [targetCalories, setTargetCalories] = useState<string>('');
+  const [targetProtein, setTargetProtein] = useState<string>('');
+  const [targetCarbs, setTargetCarbs] = useState<string>('');
+  const [targetFats, setTargetFats] = useState<string>('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
+    const macroTargets = {
+      ...(targetCalories && { calories: parseInt(targetCalories) }),
+      ...(targetProtein && { protein: parseInt(targetProtein) }),
+      ...(targetCarbs && { carbs: parseInt(targetCarbs) }),
+      ...(targetFats && { fats: parseInt(targetFats) }),
+    };
+
     const preferences: RecipePreferences = {
       cuisineType,
       dietaryRestrictions,
@@ -34,6 +45,7 @@ export function RecipeForm({ onSubmit, isLoading }: RecipeFormProps) {
       servings,
       mealType,
       additionalInstructions,
+      ...(Object.keys(macroTargets).length > 0 && { macroTargets }),
     };
 
     onSubmit(preferences);
@@ -159,6 +171,62 @@ export function RecipeForm({ onSubmit, isLoading }: RecipeFormProps) {
               value={servings}
               onChange={(e) => setServings(parseInt(e.target.value) || 1)}
             />
+          </div>
+
+          {/* Macro Targets */}
+          <div className="space-y-4">
+            <div>
+              <Label className="text-base">Daily Macro Targets (Optional)</Label>
+              <p className="text-sm text-muted-foreground mt-1">
+                Set your target macros per serving to generate nutrition-focused recipes
+              </p>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="targetCalories" className="text-sm">Calories</Label>
+                <Input
+                  id="targetCalories"
+                  type="number"
+                  min="0"
+                  placeholder="e.g., 500"
+                  value={targetCalories}
+                  onChange={(e) => setTargetCalories(e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="targetProtein" className="text-sm">Protein (g)</Label>
+                <Input
+                  id="targetProtein"
+                  type="number"
+                  min="0"
+                  placeholder="e.g., 30"
+                  value={targetProtein}
+                  onChange={(e) => setTargetProtein(e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="targetCarbs" className="text-sm">Carbs (g)</Label>
+                <Input
+                  id="targetCarbs"
+                  type="number"
+                  min="0"
+                  placeholder="e.g., 50"
+                  value={targetCarbs}
+                  onChange={(e) => setTargetCarbs(e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="targetFats" className="text-sm">Fats (g)</Label>
+                <Input
+                  id="targetFats"
+                  type="number"
+                  min="0"
+                  placeholder="e.g., 15"
+                  value={targetFats}
+                  onChange={(e) => setTargetFats(e.target.value)}
+                />
+              </div>
+            </div>
           </div>
 
           {/* Additional Instructions */}

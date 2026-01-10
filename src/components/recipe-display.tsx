@@ -13,7 +13,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Recipe } from '@/lib/types';
-import { Clock, Users, ChefHat, Bookmark, BookmarkCheck } from 'lucide-react';
+import { Clock, Users, ChefHat, Bookmark, BookmarkCheck, Flame } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { saveRecipe, deleteRecipe, isRecipeSaved } from '@/lib/recipes-db';
 
@@ -138,6 +138,43 @@ export function RecipeDisplay({ recipe, onGenerateAnother }: RecipeDisplayProps)
           </div>
         </CardContent>
       </Card>
+
+      {/* Nutrition Information */}
+      {recipe.nutrition && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Nutrition Information</CardTitle>
+            <CardDescription>Per serving</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+              <div className="flex flex-col items-center p-4 rounded-lg bg-muted/50">
+                <Flame className="w-5 h-5 text-orange-500 mb-2" />
+                <p className="text-2xl font-bold">{recipe.nutrition.calories}</p>
+                <p className="text-sm text-muted-foreground">Calories</p>
+              </div>
+              <div className="flex flex-col items-center p-4 rounded-lg bg-muted/50">
+                <p className="text-2xl font-bold">{recipe.nutrition.protein}g</p>
+                <p className="text-sm text-muted-foreground">Protein</p>
+              </div>
+              <div className="flex flex-col items-center p-4 rounded-lg bg-muted/50">
+                <p className="text-2xl font-bold">{recipe.nutrition.carbs}g</p>
+                <p className="text-sm text-muted-foreground">Carbs</p>
+              </div>
+              <div className="flex flex-col items-center p-4 rounded-lg bg-muted/50">
+                <p className="text-2xl font-bold">{recipe.nutrition.fats}g</p>
+                <p className="text-sm text-muted-foreground">Fats</p>
+              </div>
+              {recipe.nutrition.fiber && (
+                <div className="flex flex-col items-center p-4 rounded-lg bg-muted/50">
+                  <p className="text-2xl font-bold">{recipe.nutrition.fiber}g</p>
+                  <p className="text-sm text-muted-foreground">Fiber</p>
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Ingredients */}
       <Card>

@@ -5,15 +5,27 @@ export async function POST(request: NextRequest) {
   try {
     const preferences: RecipePreferences = await request.json();
 
+    // Construct macro targets string
+    const macroTargetsString = preferences.macroTargets
+      ? `
+    Target Macros (per serving):
+    - Calories: ${preferences.macroTargets.calories || 'Not specified'}
+    - Protein: ${preferences.macroTargets.protein ? `${preferences.macroTargets.protein}g` : 'Not specified'}
+    - Carbs: ${preferences.macroTargets.carbs ? `${preferences.macroTargets.carbs}g` : 'Not specified'}
+    - Fats: ${preferences.macroTargets.fats ? `${preferences.macroTargets.fats}g` : 'Not specified'}
+
+    IMPORTANT: Try to meet these macro targets as closely as possible. Adjust ingredient quantities and selections to achieve the target nutrition profile.`
+      : '';
+
     // Construct the prompt for Claude
-    const prompt = `Generate a complete recipe based on these preferences: 
+    const prompt = `Generate a complete recipe based on these preferences:
     Cuisine Type: ${preferences.cuisineType}
     Dietary Restrictions: ${preferences.dietaryRestrictions.join(', ') || 'None'}
     Skill Level: ${preferences.skillLevel}
     Maximum Cooking Time: ${preferences.maxCookingTime} minutes
     Servings: ${preferences.servings}
     Meal Type: ${preferences.mealType}
-    Additional Instructions: ${preferences.additionalInstructions}
+    Additional Instructions: ${preferences.additionalInstructions}${macroTargetsString}
 
     Please create an original, detailed recipe that matches ALL of these criteria. 
 
@@ -41,8 +53,17 @@ export async function POST(request: NextRequest) {
       "tips": [
         "Optional cooking tip 1",
         "Optional cooking tip 2"
-      ]
+      ],
+      "nutrition": {
+        "calories": number (per serving),
+        "protein": number (grams per serving),
+        "carbs": number (grams per serving),
+        "fats": number (grams per serving),
+        "fiber": number (grams per serving, optional)
+      }
     }
+
+    ${preferences.macroTargets ? 'IMPORTANT: Include accurate nutrition information that closely matches the target macros specified above. Calculate the nutrition based on the ingredients and portions used.' : 'IMPORTANT: Always include accurate nutrition information based on the ingredients and portions used.'}
 
     DO NOT include markdown code blocks or any text outside the JSON object. Your entire response must be valid JSON only.`;
 

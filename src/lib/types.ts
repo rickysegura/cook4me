@@ -1,5 +1,12 @@
 // lib/types.ts
 
+export interface MacroTargets {
+  calories?: number;
+  protein?: number;
+  carbs?: number;
+  fats?: number;
+}
+
 export interface RecipePreferences {
   cuisineType: string;
   dietaryRestrictions: string[];
@@ -8,6 +15,15 @@ export interface RecipePreferences {
   servings: number;
   mealType: string;
   additionalInstructions: string;
+  macroTargets?: MacroTargets;
+}
+
+export interface NutritionInfo {
+  calories: number;
+  protein: number;
+  carbs: number;
+  fats: number;
+  fiber?: number;
 }
 
 export interface Recipe {
@@ -21,6 +37,7 @@ export interface Recipe {
   ingredients: Ingredient[];
   instructions: string[];
   tips?: string[];
+  nutrition?: NutritionInfo;
 }
 
 export interface Ingredient {
