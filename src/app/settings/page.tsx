@@ -22,7 +22,11 @@ export default function SettingsPage() {
   const [profilePictureUrl, setProfilePictureUrl] = useState('');
   const [previewUrl, setPreviewUrl] = useState('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [initialUsername, setInitialUsername] = useState('');
+  const [initialProfilePictureUrl, setInitialProfilePictureUrl] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const hasChanges = username.trim() !== initialUsername || profilePictureUrl !== initialProfilePictureUrl;
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -36,9 +40,14 @@ export default function SettingsPage() {
         try {
           const profile = await getUserProfile(user.uid);
           if (profile) {
-            setUsername(profile.username || '');
-            setProfilePictureUrl(profile.profilePictureUrl || '');
-            setPreviewUrl(profile.profilePictureUrl || '');
+            const loadedUsername = profile.username || '';
+            const loadedProfilePictureUrl = profile.profilePictureUrl || '';
+
+            setUsername(loadedUsername);
+            setProfilePictureUrl(loadedProfilePictureUrl);
+            setPreviewUrl(loadedProfilePictureUrl);
+            setInitialUsername(loadedUsername);
+            setInitialProfilePictureUrl(loadedProfilePictureUrl);
           }
         } catch (error) {
           console.error('Error loading profile:', error);
@@ -93,6 +102,7 @@ export default function SettingsPage() {
       }
 
       setProfilePictureUrl(downloadURL);
+      setPreviewUrl(downloadURL);
       setSelectedFile(null);
       alert('Profile picture uploaded successfully!');
     } catch (error) {
@@ -117,6 +127,11 @@ export default function SettingsPage() {
         username: username.trim(),
         profilePictureUrl,
       });
+
+      // Update initial values after successful save
+      setInitialUsername(username.trim());
+      setInitialProfilePictureUrl(profilePictureUrl);
+
       alert('Settings saved successfully!');
     } catch (error) {
       console.error('Error saving settings:', error);
@@ -287,7 +302,7 @@ export default function SettingsPage() {
             </Button>
             <Button
               onClick={handleSave}
-              disabled={saving}
+              disabled={saving || !hasChanges}
               className="cursor-pointer"
             >
               {saving ? (

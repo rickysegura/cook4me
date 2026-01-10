@@ -119,20 +119,18 @@ export function RecipeDisplay({ recipe, onGenerateAnother }: RecipeDisplayProps)
               </CardDescription>
             </div>
             <div className="flex gap-2 flex-shrink-0">
-              {isSaved && (
-                <Button
-                  variant={isLoved ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={handleToggleLove}
-                  disabled={isTogglingLove}
-                  className="cursor-pointer"
-                >
-                  <Heart
-                    className={`w-4 h-4 mr-2 ${isLoved ? 'fill-current' : ''}`}
-                  />
-                  {isLoved ? 'Loved' : 'Love'}
-                </Button>
-              )}
+              <Button
+                variant={isLoved ? 'default' : 'outline'}
+                size="sm"
+                onClick={handleToggleLove}
+                disabled={isTogglingLove}
+                className="cursor-pointer"
+              >
+                <Heart
+                  className={`w-4 h-4 mr-2 ${isLoved ? 'fill-current' : ''}`}
+                />
+                {isLoved ? 'Loved' : 'Love'}
+              </Button>
               <Button
                 variant={isSaved ? 'default' : 'outline'}
                 size="sm"
@@ -297,9 +295,9 @@ export function RecipeDisplay({ recipe, onGenerateAnother }: RecipeDisplayProps)
       <Dialog open={showSignUpModal} onOpenChange={setShowSignUpModal}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Save Your Favorite Recipes</DialogTitle>
+            <DialogTitle>Unlock Personalized Recipe Magic</DialogTitle>
             <DialogDescription>
-              Create an account to save and access your favorite recipes anytime, anywhere.
+              Create an account to save recipes, mark favorites, and get AI-powered recommendations tailored just for you.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
@@ -308,20 +306,20 @@ export function RecipeDisplay({ recipe, onGenerateAnother }: RecipeDisplayProps)
                 <Bookmark className="h-5 w-5 text-primary" />
               </div>
               <div className="flex-1">
-                <h4 className="font-semibold">Bookmark Recipes</h4>
+                <h4 className="font-semibold">Save Recipes</h4>
                 <p className="text-sm text-muted-foreground">
-                  Save your favorite recipes for quick access
+                  Bookmark your favorite recipes for quick access anytime
                 </p>
               </div>
             </div>
             <div className="flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-                <Users className="h-5 w-5 text-primary" />
+                <Heart className="h-5 w-5 text-primary" />
               </div>
               <div className="flex-1">
-                <h4 className="font-semibold">Personalized Collection</h4>
+                <h4 className="font-semibold">Mark Your Favorites</h4>
                 <p className="text-sm text-muted-foreground">
-                  Build your own recipe library
+                  Love recipes to help AI learn your taste preferences
                 </p>
               </div>
             </div>
@@ -330,9 +328,20 @@ export function RecipeDisplay({ recipe, onGenerateAnother }: RecipeDisplayProps)
                 <ChefHat className="h-5 w-5 text-primary" />
               </div>
               <div className="flex-1">
-                <h4 className="font-semibold">Access Anywhere</h4>
+                <h4 className="font-semibold">Smart Personalization</h4>
                 <p className="text-sm text-muted-foreground">
-                  View your recipes on any device
+                  Get recipes tailored to your favorite cuisines and ingredients
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+                <Users className="h-5 w-5 text-primary" />
+              </div>
+              <div className="flex-1">
+                <h4 className="font-semibold">Access Everywhere</h4>
+                <p className="text-sm text-muted-foreground">
+                  Sync your collection across all your devices
                 </p>
               </div>
             </div>
