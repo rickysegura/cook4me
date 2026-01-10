@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { RecipeForm } from '@/components/recipe-form';
 import { RecipeDisplay } from '@/components/recipe-display';
 import { Recipe, RecipePreferences } from '@/lib/types';
-import { Loader2, LogOut, User, Bookmark } from 'lucide-react';
+import { Loader2, LogOut, User, Bookmark, Settings } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 
@@ -72,6 +72,10 @@ export default function Home() {
               <Button variant="outline" size="sm" className="cursor-pointer" onClick={() => router.push('/saved-recipes')}>
                 <Bookmark className="w-4 h-4 mr-2" />
                 Saved Recipes
+              </Button>
+              <Button variant="outline" size="sm" className="cursor-pointer" onClick={() => router.push('/settings')}>
+                <Settings className="w-4 h-4 mr-2" />
+                Settings
               </Button>
               <Button variant="outline" size="sm" className="cursor-pointer" onClick={handleSignOut}>
                 <LogOut className="w-4 h-4 mr-2" />

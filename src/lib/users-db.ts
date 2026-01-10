@@ -1,4 +1,4 @@
-import { doc, setDoc, getDoc, Timestamp } from 'firebase/firestore';
+import { doc, setDoc, getDoc, updateDoc, Timestamp } from 'firebase/firestore';
 import { db } from './firebase';
 import { UserProfile } from './types';
 
@@ -70,6 +70,32 @@ export const userProfileExists = async (userId: string): Promise<boolean> => {
     return userSnap.exists();
   } catch (error) {
     console.error('Error checking user profile existence:', error);
+    throw error;
+  }
+};
+
+export interface UpdateUserProfileData {
+  username?: string;
+  profilePictureUrl?: string;
+}
+
+/**
+ * Updates a user profile in Firestore
+ */
+export const updateUserProfile = async (
+  userId: string,
+  updates: UpdateUserProfileData
+): Promise<void> => {
+  try {
+    const userRef = doc(db, USERS_COLLECTION, userId);
+    const updateData = {
+      ...updates,
+      updatedAt: Timestamp.now(),
+    };
+
+    await updateDoc(userRef, updateData);
+  } catch (error) {
+    console.error('Error updating user profile:', error);
     throw error;
   }
 };
