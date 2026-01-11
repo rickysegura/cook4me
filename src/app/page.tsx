@@ -249,13 +249,6 @@ export default function Home() {
             </Button>
           </div>
         </section>
-
-        {/* Footer */}
-        <footer className="border-t py-12">
-          <div className="container mx-auto max-w-6xl px-4 text-center text-muted-foreground">
-            <p>&copy; 2026 cook4me. All rights reserved.</p>
-          </div>
-        </footer>
       </main>
     );
   }
