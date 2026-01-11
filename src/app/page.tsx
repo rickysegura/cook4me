@@ -1,16 +1,16 @@
 'use client';
 
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-
 import { useState, useEffect } from 'react';
 import { RecipeForm } from '@/components/recipe-form';
 import { RecipeDisplay } from '@/components/recipe-display';
 import { Recipe, RecipePreferences, UserProfile } from '@/lib/types';
-import { Loader2, LogOut, User, Bookmark, Sparkles, Clock, Heart, TrendingUp, Shield } from 'lucide-react';
+import { Loader2, Sparkles, Clock, Heart, TrendingUp, Shield, Bookmark } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { getUserProfile } from '@/lib/users-db';
+import { PublicNav } from '@/components/public-nav';
+import { UserNav } from '@/components/user-nav';
 
 export default function Home() {
   const { user, signOut: authSignOut } = useAuth();
@@ -89,22 +89,7 @@ export default function Home() {
   if (!user) {
     return (
       <main className="min-h-screen">
-        {/* Navigation */}
-        <nav className="border-b">
-          <div className="container mx-auto max-w-6xl px-4 py-4 flex justify-between items-center">
-            <div className="flex items-center gap-2">
-              <span className="text-2xl font-bold">cook4me.</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Button variant="ghost" size="sm" className="cursor-pointer" onClick={() => router.push('/login')}>
-                Sign in
-              </Button>
-              <Button size="sm" className="cursor-pointer" onClick={() => router.push('/signup')}>
-                Get Started
-              </Button>
-            </div>
-          </div>
-        </nav>
+        <PublicNav />
 
         {/* Hero Section */}
         <section className="container mx-auto max-w-6xl px-4 py-20 md:py-32">
@@ -257,97 +242,7 @@ export default function Home() {
   return (
     <main className="min-h-screen sm:py-8 pt-8">
       <div className="container mx-auto max-w-6xl">
-        {/* Navigation */}
-        <div className="flex justify-end mb-8 mx-4">
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-3">
-            <div className="flex items-center gap-2 cursor-pointer" onClick={() => router.push('/settings')}>
-              {userProfile?.profilePictureUrl ? (
-                <Image
-                  src={userProfile.profilePictureUrl}
-                  alt="Profile"
-                  width={32}
-                  height={32}
-                  className="w-8 h-8 rounded-full object-cover border border-border"
-                />
-              ) : (
-                <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center border border-border">
-                  <User className="w-4 h-4 text-muted-foreground" />
-                </div>
-              )}
-              <span className="text-sm font-medium max-w-[120px] truncate">
-                {userProfile?.username || user.displayName || user.email}
-              </span>
-            </div>
-            <Button variant="outline" size="sm" className="cursor-pointer" onClick={() => router.push('/saved-recipes')}>
-              <Bookmark className="w-4 h-4 mr-2" />
-              Saved Recipes
-            </Button>
-            <Button variant="outline" size="sm" className="cursor-pointer" onClick={handleSignOut}>
-              <LogOut className="w-4 h-4 mr-2" />
-              Sign out
-            </Button>
-          </div>
-
-          {/* Mobile Navigation */}
-          <div className="flex md:hidden items-center gap-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              className="cursor-pointer p-2"
-              onClick={() => router.push('/settings')}
-              aria-label="Profile"
-            >
-              {userProfile?.profilePictureUrl ? (
-                <Image
-                  src={userProfile.profilePictureUrl}
-                  alt="Profile"
-                  width={24}
-                  height={24}
-                  className="w-6 h-6 rounded-full object-cover"
-                />
-              ) : (
-                <User className="w-5 h-5" />
-              )}
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="cursor-pointer p-2"
-              onClick={() => router.push('/saved-recipes')}
-              aria-label="Saved Recipes"
-            >
-              <Bookmark className="w-5 h-5" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="cursor-pointer p-2"
-              onClick={handleSignOut}
-              aria-label="Sign out"
-            >
-              <LogOut className="w-5 h-5" />
-            </Button>
-          </div>
-        </div>
-
-        {/* Header */}
-        <div className="text-center max-w-6xl sm:mb-8">
-          <Image
-            src="/logo.png"
-            alt="Munch logo"
-            width={120}
-            height={120}
-            className="mx-auto mb-6 rounded-2xl"
-            priority
-          />
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            cook4me.
-          </h1>
-          <p className="text-xl text-muted-foreground">
-            Get personalized recipes tailored to your preferences
-          </p>
-        </div>
+        <UserNav user={user} userProfile={userProfile} onSignOut={handleSignOut} />
 
         {/* Loading State */}
         {isLoading && (
