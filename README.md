@@ -6,33 +6,33 @@ An intelligent AI-powered recipe generator that creates personalized recipes tai
 
 ## Features
 
-### 🤖 AI-Powered Recipe Generation
+### AI-Powered Recipe Generation
 - **Claude Sonnet 4 Integration**: Leverages Anthropic's latest AI model for high-quality, creative recipe generation
 - **Detailed Recipes**: Complete with ingredients, step-by-step instructions, cooking times, and helpful tips
 - **Always Includes Nutrition**: Every recipe comes with accurate calorie and macronutrient information
 
-### 🎯 Smart Personalization
+### Smart Personalization
 - **Taste Profile Learning**: Automatically analyzes your saved and loved recipes to understand your preferences
 - **Intelligent Recommendations**: Future recipes incorporate your favorite cuisines, ingredients, and cooking styles
 - **Weighted Favorites**: Loved recipes have more influence on personalization than just saved ones
 
-### 🥗 Macro & Nutrition Tracking
+### Macro & Nutrition Tracking
 - **Daily Macro Targets**: Set optional goals for calories, protein, carbs, and fats per serving
 - **Accurate Calculations**: AI generates recipes that closely match your nutritional targets
 - **Visual Nutrition Display**: Clear breakdown of macros for each recipe
 
-### 🔐 User Authentication & Profiles
+### User Authentication & Profiles
 - **Multiple Auth Methods**: Sign up with email/password or Google account
 - **User Profiles**: Customizable usernames and profile pictures
 - **Secure Storage**: Firebase Authentication with protected routes
 
-### 📚 Recipe Management
+### Recipe Management
 - **Save Recipes**: Bookmark recipes for quick access later
 - **Love System**: Mark your absolute favorites to improve personalization
 - **Recipe Collection**: View all your saved recipes in one place
 - **Easy Deletion**: Remove recipes you no longer want
 
-### 🎨 Customization Options
+### Customization Options
 - **Cuisine Types**: Italian, Mexican, Chinese, Japanese, Indian, Thai, French, Mediterranean, and more
 - **Dietary Restrictions**: Vegetarian, Vegan, Gluten-free, Dairy-free, Nut-free, etc.
 - **Skill Levels**: Beginner, Intermediate, Advanced
@@ -40,12 +40,12 @@ An intelligent AI-powered recipe generator that creates personalized recipes tai
 - **Servings**: Adjust for 1-10+ people
 - **Meal Types**: Breakfast, Lunch, Dinner, Snack, Dessert
 
-### 📱 Responsive Design
+### Responsive Design
 - **Mobile-Friendly**: Optimized navigation and layout for all screen sizes
 - **Icon-Based Mobile Nav**: Clean, efficient interface on small screens
 - **Fast Performance**: Built with Next.js 15 and Turbopack
 
-### 📲 Progressive Web App (PWA)
+### Progressive Web App (PWA)
 - **Installable**: Add cook4me to your home screen on any device
 - **Offline Support**: Service workers cache assets for offline functionality
 - **App-Like Experience**: Runs in standalone mode without browser chrome
