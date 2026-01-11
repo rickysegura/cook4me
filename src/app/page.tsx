@@ -7,7 +7,7 @@ import { useState, useEffect } from 'react';
 import { RecipeForm } from '@/components/recipe-form';
 import { RecipeDisplay } from '@/components/recipe-display';
 import { Recipe, RecipePreferences, UserProfile } from '@/lib/types';
-import { Loader2, LogOut, User, Bookmark } from 'lucide-react';
+import { Loader2, LogOut, User, Bookmark, Sparkles, Clock, Heart, TrendingUp, Shield } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { getUserProfile } from '@/lib/users-db';
@@ -85,94 +85,257 @@ export default function Home() {
     setRecipe(null);
   };
 
+  // Landing page for signed-out users
+  if (!user) {
+    return (
+      <main className="min-h-screen">
+        {/* Navigation */}
+        <nav className="border-b">
+          <div className="container mx-auto max-w-6xl px-4 py-4 flex justify-between items-center">
+            <div className="flex items-center gap-2">
+              <span className="text-2xl font-bold">cook4me.</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Button variant="ghost" size="sm" className="cursor-pointer" onClick={() => router.push('/login')}>
+                Sign in
+              </Button>
+              <Button size="sm" className="cursor-pointer" onClick={() => router.push('/signup')}>
+                Get Started
+              </Button>
+            </div>
+          </div>
+        </nav>
+
+        {/* Hero Section */}
+        <section className="container mx-auto max-w-6xl px-4 py-20 md:py-32">
+          <div className="text-center space-y-6 max-w-3xl mx-auto">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-sm font-medium mb-4">
+              <Sparkles className="w-4 h-4" />
+              AI-Powered Recipe Generation
+            </div>
+            <h1 className="text-5xl md:text-7xl font-bold tracking-tight">
+              Your Personal Chef,{' '}
+              <span className="text-primary">Powered by AI</span>
+            </h1>
+            <p className="text-xl md:text-2xl text-muted-foreground">
+              Generate personalized recipes tailored to your taste, dietary needs, and skill level in seconds.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+              <Button size="lg" className="cursor-pointer text-lg px-8" onClick={() => router.push('/signup')}>
+                Start Cooking Free
+              </Button>
+              <Button size="lg" variant="outline" className="cursor-pointer text-lg px-8" onClick={() => router.push('/login')}>
+                Sign In
+              </Button>
+            </div>
+            <p className="text-sm text-muted-foreground">No credit card required</p>
+          </div>
+        </section>
+
+        {/* Features Grid */}
+        <section className="container mx-auto max-w-6xl px-4 py-20 border-t">
+          <div className="text-center space-y-4 mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold">Everything You Need to Cook Smarter</h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Powerful features designed to make meal planning effortless and enjoyable.
+            </p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="space-y-3 p-6 rounded-lg border bg-card hover:shadow-lg transition-shadow">
+              <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
+                <Sparkles className="w-6 h-6 text-primary" />
+              </div>
+              <h3 className="text-xl font-semibold">AI-Powered Generation</h3>
+              <p className="text-muted-foreground">
+                Advanced AI creates unique recipes based on your preferences, dietary restrictions, and cooking skills.
+              </p>
+            </div>
+            <div className="space-y-3 p-6 rounded-lg border bg-card hover:shadow-lg transition-shadow">
+              <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
+                <Heart className="w-6 h-6 text-primary" />
+              </div>
+              <h3 className="text-xl font-semibold">Personalized to Your Taste</h3>
+              <p className="text-muted-foreground">
+                Our taste profiling system learns what you love and suggests recipes you&apos;ll enjoy.
+              </p>
+            </div>
+            <div className="space-y-3 p-6 rounded-lg border bg-card hover:shadow-lg transition-shadow">
+              <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
+                <TrendingUp className="w-6 h-6 text-primary" />
+              </div>
+              <h3 className="text-xl font-semibold">Macro Tracking</h3>
+              <p className="text-muted-foreground">
+                Set daily macro targets and get recipes that align with your nutritional goals automatically.
+              </p>
+            </div>
+            <div className="space-y-3 p-6 rounded-lg border bg-card hover:shadow-lg transition-shadow">
+              <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
+                <Clock className="w-6 h-6 text-primary" />
+              </div>
+              <h3 className="text-xl font-semibold">Time-Conscious</h3>
+              <p className="text-muted-foreground">
+                Set your maximum cooking time and get recipes that fit perfectly into your busy schedule.
+              </p>
+            </div>
+            <div className="space-y-3 p-6 rounded-lg border bg-card hover:shadow-lg transition-shadow">
+              <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
+                <Bookmark className="w-6 h-6 text-primary" />
+              </div>
+              <h3 className="text-xl font-semibold">Save Your Favorites</h3>
+              <p className="text-muted-foreground">
+                Build your personal recipe collection and access your favorite meals anytime, anywhere.
+              </p>
+            </div>
+            <div className="space-y-3 p-6 rounded-lg border bg-card hover:shadow-lg transition-shadow">
+              <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
+                <Shield className="w-6 h-6 text-primary" />
+              </div>
+              <h3 className="text-xl font-semibold">Dietary Restrictions</h3>
+              <p className="text-muted-foreground">
+                Support for vegetarian, vegan, gluten-free, keto, and many more dietary preferences.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* How It Works */}
+        <section className="container mx-auto max-w-6xl px-4 py-20 border-t">
+          <div className="text-center space-y-4 mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold">How It Works</h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              From preferences to plate in three simple steps.
+            </p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-12 max-w-4xl mx-auto">
+            <div className="text-center space-y-4">
+              <div className="w-16 h-16 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-2xl font-bold mx-auto">
+                1
+              </div>
+              <h3 className="text-xl font-semibold">Set Your Preferences</h3>
+              <p className="text-muted-foreground">
+                Choose your cuisine, dietary needs, skill level, cooking time, and macro targets.
+              </p>
+            </div>
+            <div className="text-center space-y-4">
+              <div className="w-16 h-16 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-2xl font-bold mx-auto">
+                2
+              </div>
+              <h3 className="text-xl font-semibold">AI Generates Recipe</h3>
+              <p className="text-muted-foreground">
+                Our AI creates a unique recipe tailored specifically to your requirements.
+              </p>
+            </div>
+            <div className="text-center space-y-4">
+              <div className="w-16 h-16 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-2xl font-bold mx-auto">
+                3
+              </div>
+              <h3 className="text-xl font-semibold">Cook & Enjoy</h3>
+              <p className="text-muted-foreground">
+                Follow the step-by-step instructions and enjoy your personalized meal.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* CTA Section */}
+        <section className="container mx-auto max-w-6xl px-4 py-20 border-t">
+          <div className="max-w-3xl mx-auto text-center space-y-6 p-12 rounded-2xl bg-primary/5 border-2 border-primary/20">
+            <h2 className="text-3xl md:text-4xl font-bold">Ready to Transform Your Cooking?</h2>
+            <p className="text-xl text-muted-foreground">
+              Join thousands of home cooks discovering new recipes every day.
+            </p>
+            <Button size="lg" className="cursor-pointer text-lg px-8" onClick={() => router.push('/signup')}>
+              Get Started for Free
+            </Button>
+          </div>
+        </section>
+
+        {/* Footer */}
+        <footer className="border-t py-12">
+          <div className="container mx-auto max-w-6xl px-4 text-center text-muted-foreground">
+            <p>&copy; 2026 cook4me. All rights reserved.</p>
+          </div>
+        </footer>
+      </main>
+    );
+  }
+
+  // Recipe generator for signed-in users
   return (
     <main className="min-h-screen sm:py-8 pt-8">
       <div className="container mx-auto max-w-6xl">
         {/* Navigation */}
         <div className="flex justify-end mb-8 mx-4">
-          {user ? (
-            <>
-              {/* Desktop Navigation */}
-              <div className="hidden md:flex items-center gap-3">
-                <div className="flex items-center gap-2 cursor-pointer" onClick={() => router.push('/settings')}>
-                  {userProfile?.profilePictureUrl ? (
-                    <Image
-                      src={userProfile.profilePictureUrl}
-                      alt="Profile"
-                      width={32}
-                      height={32}
-                      className="w-8 h-8 rounded-full object-cover border border-border"
-                    />
-                  ) : (
-                    <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center border border-border">
-                      <User className="w-4 h-4 text-muted-foreground" />
-                    </div>
-                  )}
-                  <span className="text-sm font-medium max-w-[120px] truncate">
-                    {userProfile?.username || user.displayName || user.email}
-                  </span>
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center gap-3">
+            <div className="flex items-center gap-2 cursor-pointer" onClick={() => router.push('/settings')}>
+              {userProfile?.profilePictureUrl ? (
+                <Image
+                  src={userProfile.profilePictureUrl}
+                  alt="Profile"
+                  width={32}
+                  height={32}
+                  className="w-8 h-8 rounded-full object-cover border border-border"
+                />
+              ) : (
+                <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center border border-border">
+                  <User className="w-4 h-4 text-muted-foreground" />
                 </div>
-                <Button variant="outline" size="sm" className="cursor-pointer" onClick={() => router.push('/saved-recipes')}>
-                  <Bookmark className="w-4 h-4 mr-2" />
-                  Saved Recipes
-                </Button>
-                <Button variant="outline" size="sm" className="cursor-pointer" onClick={handleSignOut}>
-                  <LogOut className="w-4 h-4 mr-2" />
-                  Sign out
-                </Button>
-              </div>
-
-              {/* Mobile Navigation */}
-              <div className="flex md:hidden items-center gap-2">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="cursor-pointer p-2"
-                  onClick={() => router.push('/settings')}
-                  aria-label="Profile"
-                >
-                  {userProfile?.profilePictureUrl ? (
-                    <Image
-                      src={userProfile.profilePictureUrl}
-                      alt="Profile"
-                      width={24}
-                      height={24}
-                      className="w-6 h-6 rounded-full object-cover"
-                    />
-                  ) : (
-                    <User className="w-5 h-5" />
-                  )}
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="cursor-pointer p-2"
-                  onClick={() => router.push('/saved-recipes')}
-                  aria-label="Saved Recipes"
-                >
-                  <Bookmark className="w-5 h-5" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="cursor-pointer p-2"
-                  onClick={handleSignOut}
-                  aria-label="Sign out"
-                >
-                  <LogOut className="w-5 h-5" />
-                </Button>
-              </div>
-            </>
-          ) : (
-            <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm" className="cursor-pointer" onClick={() => router.push('/login')}>
-                Sign in
-              </Button>
-              <Button size="sm" className="cursor-pointer" onClick={() => router.push('/signup')}>
-                Sign up
-              </Button>
+              )}
+              <span className="text-sm font-medium max-w-[120px] truncate">
+                {userProfile?.username || user.displayName || user.email}
+              </span>
             </div>
-          )}
+            <Button variant="outline" size="sm" className="cursor-pointer" onClick={() => router.push('/saved-recipes')}>
+              <Bookmark className="w-4 h-4 mr-2" />
+              Saved Recipes
+            </Button>
+            <Button variant="outline" size="sm" className="cursor-pointer" onClick={handleSignOut}>
+              <LogOut className="w-4 h-4 mr-2" />
+              Sign out
+            </Button>
+          </div>
+
+          {/* Mobile Navigation */}
+          <div className="flex md:hidden items-center gap-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="cursor-pointer p-2"
+              onClick={() => router.push('/settings')}
+              aria-label="Profile"
+            >
+              {userProfile?.profilePictureUrl ? (
+                <Image
+                  src={userProfile.profilePictureUrl}
+                  alt="Profile"
+                  width={24}
+                  height={24}
+                  className="w-6 h-6 rounded-full object-cover"
+                />
+              ) : (
+                <User className="w-5 h-5" />
+              )}
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="cursor-pointer p-2"
+              onClick={() => router.push('/saved-recipes')}
+              aria-label="Saved Recipes"
+            >
+              <Bookmark className="w-5 h-5" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="cursor-pointer p-2"
+              onClick={handleSignOut}
+              aria-label="Sign out"
+            >
+              <LogOut className="w-5 h-5" />
+            </Button>
+          </div>
         </div>
 
         {/* Header */}

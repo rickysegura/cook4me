@@ -19,7 +19,7 @@ export function RecipeForm({ onSubmit, isLoading }: RecipeFormProps) {
   const [dietaryRestrictions, setDietaryRestrictions] = useState<string[]>([]);
   const [skillLevel, setSkillLevel] = useState('Beginner');
   const [maxCookingTime, setMaxCookingTime] = useState([45]);
-  const [servings, setServings] = useState(4);
+  const [servings, setServings] = useState('4');
   const [mealType, setMealType] = useState('Dinner');
   const [additionalInstructions, setAdditionalInstructions] = useState<string>("None");
   const [targetCalories, setTargetCalories] = useState<string>('');
@@ -42,7 +42,7 @@ export function RecipeForm({ onSubmit, isLoading }: RecipeFormProps) {
       dietaryRestrictions,
       skillLevel,
       maxCookingTime: maxCookingTime[0],
-      servings,
+      servings: parseInt(servings),
       mealType,
       additionalInstructions,
       ...(Object.keys(macroTargets).length > 0 && { macroTargets }),
@@ -163,14 +163,19 @@ export function RecipeForm({ onSubmit, isLoading }: RecipeFormProps) {
           {/* Servings */}
           <div className="space-y-2">
             <Label htmlFor="servings">Number of Servings</Label>
-            <Input
-              id="servings"
-              type="number"
-              min={1}
-              max={12}
-              value={servings}
-              onChange={(e) => setServings(parseInt(e.target.value) || 1)}
-            />
+            <Select value={servings} onValueChange={setServings}>
+              <SelectTrigger id="servings">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="1">1</SelectItem>
+                <SelectItem value="2">2</SelectItem>
+                <SelectItem value="3">3</SelectItem>
+                <SelectItem value="4">4</SelectItem>
+                <SelectItem value="5">5</SelectItem>
+                <SelectItem value="6">6</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           {/* Macro Targets */}
